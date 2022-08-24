@@ -11,7 +11,7 @@ import {
 import { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { Colors } from "../../constants/colors";
-import { getMapPreview } from "../../utils/location";
+import { getAddress, getMapPreview } from "../../utils/location";
 import OutlinedButton from "../UI/OutlinedButton";
 
 function LocationPicker({ onPickLocation }) {
@@ -33,10 +33,13 @@ function LocationPicker({ onPickLocation }) {
     }
   }, [params, isFocused]);
 
-  useEffect(
-    () => onPickLocation(pickedLocation),
-    [onPickLocation, pickedLocation]
-  );
+  useEffect(() => {
+    if (pickedLocation) {
+      getAddress(pickedLocation).then((address) =>
+        onPickLocation({ ...pickedLocation, address })
+      );
+    }
+  }, [onPickLocation, pickedLocation]);
 
   async function verifyPermissions() {
     if (
