@@ -1,9 +1,14 @@
 import {
+  useNavigation,
+  useRoute,
+  useIsFocused,
+} from "@react-navigation/native";
+import {
   getCurrentPositionAsync,
   useForegroundPermissions,
   PermissionStatus,
 } from "expo-location";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { Colors } from "../../constants/colors";
 import { getMapPreview } from "../../utils/location";
@@ -11,8 +16,22 @@ import OutlinedButton from "../UI/OutlinedButton";
 
 function LocationPicker() {
   const [pickedLocation, setPickedLocation] = useState();
+  const { navigate } = useNavigation();
+  const { params } = useRoute();
+  const isFocused = useIsFocused();
   const [locationPermissionInformation, requestPermission] =
     useForegroundPermissions();
+
+  useEffect(() => {
+    if (isFocused && params) {
+      const mapPickedLocation = {
+        lat: params.latitude,
+        lng: params.longitude,
+      };
+
+      setPickedLocation(mapPickedLocation);
+    }
+  }, [params, isFocused]);
 
   async function verifyPermissions() {
     if (
@@ -43,7 +62,9 @@ function LocationPicker() {
     setPickedLocation({ lat: coords.latitude, lng: coords.longitude });
   }
 
-  function pickOnMapHandler() {}
+  function pickOnMapHandler() {
+    navigate("Map");
+  }
 
   return (
     <View>
