@@ -1,16 +1,33 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar } from "expo-status-bar";
+import { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import IconButton from "./components/UI/IconButton";
 import { Colors } from "./constants/colors";
 import AddPlace from "./screens/AddPlace";
 import AllPlaces from "./screens/AllPlaces";
 import Map from "./screens/Map";
+import { init } from "./utils/database";
+import * as SplashScreen from "expo-splash-screen";
 
 const Stack = createNativeStackNavigator();
 
+// SplashScreen.preventAutoHideAsync();
+
 export default function App() {
+  const [dbInitialized, setDbInitialized] = useState(false);
+
+  useEffect(() => {
+    init()
+      .then(() => setDbInitialized(true), console.log)
+      .finally(SplashScreen.hideAsync);
+  }, []);
+
+  // if (!dbInitialized) {
+  //   return null;
+  // }
+
   return (
     <>
       <StatusBar style="dark" />
@@ -58,3 +75,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
+
+// install: expo-app-loading, expo-sqlite
+// lesons to add in final cut: 26

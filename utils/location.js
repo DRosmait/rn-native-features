@@ -13,6 +13,7 @@ export async function getAddress({ lat, lng }) {
   if (!res.ok) throw new Error("Faild to fetch address");
 
   const data = await res.json();
-  const address = data.results[0].formated_address;
+  const address = data.results[0].formatted_address;
+
   return address;
 }
