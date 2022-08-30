@@ -10,6 +10,7 @@ import AllPlaces from "./screens/AllPlaces";
 import Map from "./screens/Map";
 import { init } from "./utils/database";
 import * as SplashScreen from "expo-splash-screen";
+import PlaceDetails from "./screens/PlaceDetails";
 
 const Stack = createNativeStackNavigator();
 
@@ -23,10 +24,6 @@ export default function App() {
       .then(() => setDbInitialized(true), console.log)
       .finally(SplashScreen.hideAsync);
   }, []);
-
-  // if (!dbInitialized) {
-  //   return null;
-  // }
 
   return (
     <>
@@ -61,6 +58,7 @@ export default function App() {
           <Stack.Screen name="AddPlace" component={AddPlace} />
 
           <Stack.Screen name="Map" component={Map} />
+          <Stack.Screen name="PlaceDetails" component={PlaceDetails} />
         </Stack.Navigator>
       </NavigationContainer>
     </>

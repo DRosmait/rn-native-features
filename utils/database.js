@@ -53,12 +53,25 @@ export function fetchPlaces() {
         (_, result) =>
           resolve(
             result.rows._array.map(
-              ({ title, imageUri, address, lat, lng }) =>
-                new Place(title, imageUri, address, lat, lng)
+              ({ title, imageUri, address, lat, lng, id }) =>
+                new Place(title, imageUri, address, lat, lng, id)
             )
           ),
         (_, error) => reject(error)
       );
     });
+  });
+}
+
+export function fetchPlaceDetails(id) {
+  return new Promise((resolve, reject) => {
+    return database.transaction((tx) =>
+      tx.executeSql(
+        "SELECT * FROM places WHERE id = ?",
+        [id],
+        (_, result) => resolve(result.rows._array[0]),
+        (_, error) => reject(error)
+      )
+    );
   });
 }
